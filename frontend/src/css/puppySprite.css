@@ -1,0 +1,40 @@
+.puppy-sprite {
+	width: 128px;
+	height: 128px;
+	background-image: url("/assets/puppy-sprite.png"); /* 放在 public/assets 下 */
+	background-repeat: no-repeat;
+	image-rendering: pixelated;
+}
+
+/* 💤 默认睡觉动画 */
+.puppy-sleep {
+	background-position: 0 0;
+	animation: puppySleep 1s steps(4) infinite;
+}
+
+@keyframes puppySleep {
+	from { background-position: 0 0; }
+	to   { background-position: -512px 0; } /* 128px * 4 */
+}
+
+/* 🐕‍🦺 摇尾巴动画（第2行） */
+.puppy-tailwag {
+	background-position: 0 -128px;
+	animation: puppyTailWag 1s steps(4) infinite;
+}
+
+@keyframes puppyTailWag {
+	from { background-position: 0 -128px; }
+	to   { background-position: -512px -128px; }
+}
+
+/* 🐶 跳跃动画（第3行） */
+.puppy-jump {
+	background-position: 0 -256px;
+	animation: puppyJump 1s steps(4) infinite;
+}
+
+@keyframes puppyJump {
+	from { background-position: 0 -256px; }
+	to   { background-position: -512px -256px; }
+}

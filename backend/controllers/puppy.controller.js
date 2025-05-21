@@ -5,15 +5,27 @@ import axios from "axios";
 
 export const getPuppyRecommendation = async (req, res) => {
 	try {
-		const { conversationId, currentUserMessage } = req.query;
-		console.log("🐶 Conversation ID:", conversationId, "Current User Message:", currentUserMessage);
-		// const userIds = req.user.id;
-		const convo = await Conversation.findById(conversationId);
-		const userIds = convo.participants;
+		const { conversationId: participantId, currentUserMessage } = req.query;
 		
-		const users = await User.find({ _id: { $in: userIds } });
-		const userMap = {};
-		users.forEach(u => (userMap[u._id.toString()] = u));
+		const currentUserId  = req.user.userId;
+		console.log("🐶 Conversation ID:", participantId, "Current User Message:", currentUserMessage, "currentUserId", currentUserId);
+		// const convo = await Conversation.findById(conversationId);
+		// const userIds = convo.participants;
+		const userIds = participantId.split(",").map(id => id.trim());
+		// const users = await User.find({ _id: { $in: userIds } });
+		// const userMap = {};
+		// users.forEach(u => (userMap[u._id.toString()] = u));
+		if (!participantId || !currentUserMessage) {
+			return res.status(400).json({ error: "Missing participantId or currentUserMessage" });
+		}
+
+		// 1️⃣ 查找当前用户和对方用户之间的 conversation
+		const convo = await Conversation.findOne({
+			participants: { $all: [currentUserId, participantId] }
+		});
+		if (!convo) {
+			return res.status(404).json({ error: "Conversation not found" });
+		}
 
 		const messages = await Message.find({ _id: { $in: convo.messages } }).sort({ createdAt: 1 });
 		const formattedHistory = messages.map(msg => ({

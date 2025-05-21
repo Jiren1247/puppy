@@ -16,6 +16,22 @@ const useConversation = create((set) => ({
 	messages: [],
 	setMessages: (messages) => set({ messages }),
 
+	puppets: {},
+
+	setPuppets: (puppets) => set({ puppets }),
+
+	updatePuppetAction: (userId, actionType, actionId) =>
+		set((state) => ({
+			puppets: {
+				...state.puppets,
+				[userId]: {
+					...(state.puppets[userId] || {}),
+					currentAction: actionType,
+					actionId: actionId || Date.now()
+				}
+			}
+	}))
+
 }));
 
 export default useConversation;

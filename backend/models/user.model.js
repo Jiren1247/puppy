@@ -26,6 +26,11 @@ const userSchema = new mongoose.Schema(
 			default: "",
 		},
 		// createdAt, updatedAt => Member since <createdAt>
+		puppetType: {
+			type: String,
+			enum: ["purple", "robot", "fox"],
+			default: "purple",
+		},
 	},
 	{ timestamps: true }
 );

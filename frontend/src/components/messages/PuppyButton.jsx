@@ -3,11 +3,13 @@ import axios from "axios";
 import useConversation from "../../zustand/useConversation";
 import { useAuthContext } from "../../context/AuthContext";
 import { useEffect } from "react";
+import { socket } from "../../socket/socket";
 
-const PuppyButton = ({message}) => {
+const PuppyButton = ({message, onPuppyAction}) => {
     const { conversationId, currentUserId, messages } = useConversation();
     const setCurrentUserId = useConversation((state) => state.setCurrentUserId);
     const { authUser } = useAuthContext();
+
     useEffect(() => {
 	if (authUser?._id) {
 		setCurrentUserId(authUser._id);
@@ -36,6 +38,16 @@ const PuppyButton = ({message}) => {
                 withCredentials: true
 			});
 			console.log("🐶 Puppy Recommendation:", res.data);
+			// onPuppyAction({ type: 'kiss-colorful', id: Date.now() });
+			const actionType = 'kiss-colorful' || 'sleep';
+			// 本地播放
+			onPuppyAction({ type: actionType, id: Date.now() });
+			// 传给对方
+			socket.emit("puppet-action", {
+				userId: authUser._id,
+				action: actionType,
+				receiverId: conversationId,
+			})
 		} catch (err) {
 			console.error("🐶 Error fetching puppy action:", err);
 		}

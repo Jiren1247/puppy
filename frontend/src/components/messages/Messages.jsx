@@ -3,11 +3,13 @@ import useGetMessages from "../../hooks/useGetMessages";
 import MessageSkeleton from "../skeletons/MessageSkeleton";
 import Message from "./Message";
 import useListenMessages from "../../hooks/useListenMessages";
+import PuppySprite from "./PuppySprite";
 
 const Messages = () => {
 	const { messages, loading } = useGetMessages();
 	useListenMessages();
 	const lastMessageRef = useRef();
+	// const [puppyAction, setPuppyAction] = useState(null);
 
 	useEffect(() => {
 		setTimeout(() => {
@@ -21,6 +23,7 @@ const Messages = () => {
 				messages.length > 0 &&
 				messages.map((message) => (
 					<div key={message._id} ref={lastMessageRef}>
+						{/* <PuppySprite action={puppyAction} /> */}
 						<Message message={message} />
 					</div>
 				))}

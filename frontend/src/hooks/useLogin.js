@@ -15,6 +15,9 @@ const useLogin = () => {
 				method: "POST",
 				headers: { "Content-Type": "application/json" },
 				body: JSON.stringify({ username, password }),
+			},
+			{
+				withCredentials: true
 			});
 
 			const data = await res.json();

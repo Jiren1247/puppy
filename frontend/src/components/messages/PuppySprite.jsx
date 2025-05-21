@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
-const PuppySprite = ({ userId, type = "purple", action = "sleep", actionId = 0, position = "left" }) => {
+const PuppySprite = ({ userId, type = "purple", action = "sleep", actionId = 0, position = "left", mirrored}) => {
 	const [isPlayingAction, setIsPlayingAction] = useState(false);
 
 	useEffect(() => {
@@ -18,10 +18,10 @@ const PuppySprite = ({ userId, type = "purple", action = "sleep", actionId = 0, 
 
 	const getGifPath = (type, action) => `/assets/${type}/${action}.gif`;
 
-	const sleepPositionClass = position === "left" ? "left-4" : "right-4";
+	const sleepPositionClass = position === "left" ? "left-68" : "right-4";
 	const actionPositionClass =
 		position === "left"
-			? "left-1/4 -translate-x-1/2"
+			? "left-1/2 -translate-x-1/2"
 			: "right-1/4 translate-x-1/2";
 
 	return (
@@ -32,7 +32,7 @@ const PuppySprite = ({ userId, type = "purple", action = "sleep", actionId = 0, 
 					<img
 						src={getGifPath(type, "sleep")}
 						alt={`${type}-sleep`}
-						className="w-20 h-20"
+						className={`w-20 h-20 ${mirrored ? "transform scale-x-[-1]" : ""}`}
 					/>
 				</div>
 			)}
@@ -52,7 +52,7 @@ const PuppySprite = ({ userId, type = "purple", action = "sleep", actionId = 0, 
 							src={getGifPath(type, action)}
 							onError={(e) => (e.target.src = getGifPath(type, "sleep"))}
 							alt={`${type}-${action}`}
-							className="w-32 h-32"
+							className={`w-32 h-32 ${mirrored ? "transform scale-x-[-1]" : ""}`}
 						/>
 					</motion.div>
 				)}

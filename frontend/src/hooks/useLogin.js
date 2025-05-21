@@ -16,16 +16,26 @@ const useLogin = () => {
 				headers: { "Content-Type": "application/json" },
 				body: JSON.stringify({ username, password }),
 			},
-			{
-				withCredentials: true
-			});
+				{
+					withCredentials: true
+				});
 
 			const data = await res.json();
 			if (data.error) {
 				throw new Error(data.error);
 			}
 
-			localStorage.setItem("chat-user", JSON.stringify(data));
+			// localStorage.setItem("chat-user", JSON.stringify(data));
+			localStorage.setItem(
+				"chat-user",
+				JSON.stringify({
+					_id: data._id,
+					fullName: data.fullName,
+					username: data.username,
+					puppetType: data.puppetType,
+					profilePic: data.profilePic,
+				})
+			);
 			setAuthUser(data);
 		} catch (error) {
 			toast.error(error.message);

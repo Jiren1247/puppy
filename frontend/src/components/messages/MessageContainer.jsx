@@ -5,7 +5,7 @@ import Messages from "./Messages";
 import { TiMessages } from "react-icons/ti";
 import { useAuthContext } from "../../context/AuthContext";
 import PuppySprite from "./PuppySprite";
-import { socket } from "../../socket/socket";
+import { getSocket } from "../../socket/socket";
 
 const MessageContainer = () => {
 	const { selectedConversation,
@@ -18,23 +18,40 @@ const MessageContainer = () => {
 	// 	[authUser?._id]: { type: authUser?.puppetType || "purple", currentAction: "sleep", actionId: 0 },
 	// 	[selectedConversation?._id]: { type: selectedConversation?.puppetType || "purple", currentAction: "sleep", actionId: 0 },
 	// });
+	// const socket = getSocket();
+
+	// useEffect(() => {
+	// 	return () => setSelectedConversation(null);
+	// }, [setSelectedConversation]);
 
 	useEffect(() => {
-		// cleanup function (unmounts)
-		return () => setSelectedConversation(null);
-	}, [setSelectedConversation]);
+		console.log("🐶 puppets updated:", puppets);
+	}, [puppets]);
+
 
 	useEffect(() => {
-		socket.on("puppet-action-update", ({ userId, action, actionId }) => {
-			updatePuppetAction(userId, action, actionId);
-		});
-		return () => socket.off("puppet-action-update");
+		const socket = getSocket(); // ✅ 使用 getSocket 拿到 socket 实例
+		if (!socket) return;
+
+		const handler = ({ userId, action, actionId }) => {
+			// const freshSelected = useConversation.getState().selectedConversation;
+			// console.log("🎬 puppet-action-update", userId, action, actionId);
+			// console.log("📍 selectedConversation._id:", freshSelected?._id);
+			// console.log("📍 authUser._id:", authUser?._id);
+			// updatePuppetAction(userId, action, actionId);
+			useConversation.getState().updatePuppetAction(userId, action, actionId);
+		};
+
+		socket.on("puppet-action-update", handler);
+
+		return () => socket.off("puppet-action-update", handler);
 	}, []);
 
 	useEffect(() => {
 		if (authUser && selectedConversation) {
 			updatePuppetAction(authUser._id, "sleep");
 			updatePuppetAction(selectedConversation._id, "sleep");
+			console.log("🐶 puppets", selectedConversation, "自己的id", authUser._id, "slectedConversation", selectedConversation._id);
 		}
 	}, [authUser, selectedConversation]);
 
@@ -54,20 +71,41 @@ const MessageContainer = () => {
 					{/* <PuppySprite 
 						action={puppyAction} 
 					/> */}
+					{/* 自己的 */}
 					<PuppySprite
 						userId={authUser._id}
 						type={authUser.puppetType || "purple"}
 						action={puppets[authUser._id]?.currentAction || "sleep"}
 						actionId={puppets[authUser._id]?.actionId || 0}
-						position="left"
+						position="right"
+						mirrored={false}
 					/>
+					{/* 对方的 */}
 					<PuppySprite
 						userId={selectedConversation._id}
 						type={selectedConversation.puppetType || "purple"}
 						action={puppets[selectedConversation._id]?.currentAction || "sleep"}
 						actionId={puppets[selectedConversation._id]?.actionId || 0}
-						position="right"
+						position="left"
+						mirrored={true}
 					/>
+					{/* {Object.entries(puppets).map(([userId, puppet]) => (
+						<PuppySprite
+							key={userId}
+							userId={userId}
+							type={
+								userId === authUser._id
+									? authUser.puppetType
+									: selectedConversation?._id === userId
+										? selectedConversation.puppetType
+										: "purple"
+							}
+							action={puppet.currentAction}
+							actionId={puppet.actionId}
+							position={userId === authUser._id ? "right" : "left"}
+							mirrored={userId !== authUser._id}
+						/>
+					))} */}
 					<MessageInput onPuppyAction={updatePuppetAction} puppyAction={puppets} />
 				</>
 			)}

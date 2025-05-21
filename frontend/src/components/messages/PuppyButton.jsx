@@ -3,12 +3,13 @@ import axios from "axios";
 import useConversation from "../../zustand/useConversation";
 import { useAuthContext } from "../../context/AuthContext";
 import { useEffect } from "react";
-import { socket } from "../../socket/socket";
+import { getSocket } from "../../socket/socket";
 
 const PuppyButton = ({message, onPuppyAction}) => {
-    const { conversationId, currentUserId, messages } = useConversation();
+    const { receiverId, currentUserId, messages } = useConversation();
     const setCurrentUserId = useConversation((state) => state.setCurrentUserId);
     const { authUser } = useAuthContext();
+	const socket = getSocket();
 
     useEffect(() => {
 	if (authUser?._id) {
@@ -31,22 +32,22 @@ const PuppyButton = ({message, onPuppyAction}) => {
 			alert("No valid message found.");
 			return;
 		}
-        console.log("🐶 Current User Message:", currentUserMessage, "conversationId:", conversationId, "user_id", currentUserId);
+        console.log("🐶 Current User Message:", currentUserMessage, "receiverId:", receiverId, "user_id", currentUserId);
 		try {
 			const res = await axios.get(`http://localhost:5000/api/puppy-recommendation`, {
-				params: { conversationId, currentUserMessage },
+				params: { receiverId, currentUserMessage },
                 withCredentials: true
 			});
 			console.log("🐶 Puppy Recommendation:", res.data);
 			// onPuppyAction({ type: 'kiss-colorful', id: Date.now() });
 			const actionType = 'kiss-colorful' || 'sleep';
 			// 本地播放
-			onPuppyAction({ type: actionType, id: Date.now() });
+			onPuppyAction(authUser._id, actionType, Date.now());
 			// 传给对方
 			socket.emit("puppet-action", {
 				userId: authUser._id,
 				action: actionType,
-				receiverId: conversationId,
+				receiverId: receiverId,
 			})
 		} catch (err) {
 			console.error("🐶 Error fetching puppy action:", err);

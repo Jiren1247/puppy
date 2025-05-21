@@ -1,9 +1,20 @@
 import { io } from "socket.io-client";
 
-// 获取当前登录用户 ID（或你可以传入参数）
-const userId = localStorage.getItem("userId"); // 或从 context 获取
+let socket;
 
-export const socket = io("http://localhost:5000", {
-	query: { userId },
-	withCredentials: true,
-});
+export const initSocket = (userId) => {
+	if (!userId) return;
+	console.log("🐶 [Socket] Initializing socket with userId:", userId);
+	socket = io("http://localhost:5000", {
+		query: { userId },
+		withCredentials: true,
+	});
+
+	// 每次连接时重新注册 userId（防止 socket 重连时丢失身份）
+	socket.on("connect", () => {
+		// console.log("✅ [Socket] Connected, registering userId:", userId);
+		socket.emit("register-user", userId);
+	});
+};
+
+export const getSocket = () => socket;

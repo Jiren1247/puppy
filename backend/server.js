@@ -12,6 +12,7 @@ import connectToMongoDB from "./db/connectToMongoDB.js";
 import { app, server } from "./socket/socket.js";
 import cors from 'cors';
 
+
 dotenv.config();
 
 const __dirname = path.resolve();
@@ -34,6 +35,7 @@ app.use("/api", puppyRoutes);
 // app.get("*", (req, res) => {
 // 	res.sendFile(path.join(__dirname, "frontend", "dist", "index.html"));
 // });
+
 
 server.listen(PORT, () => {
 	connectToMongoDB();

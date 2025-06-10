@@ -1,0 +1,598 @@
+[
+  {
+    "name": "throw heart",
+    "type": "active",
+    "description": "Throw a heart as a gesture of affection or love.",
+    "keywords": [
+      "love",
+      "romantic",
+      "playful"
+    ],
+    "reactionCandidates": [
+      "carry heart",
+      "catch heart",
+      "blush"
+    ]
+  },
+  {
+    "name": "carry heart",
+    "type": "passive",
+    "description": "Catch and carry a heart with care and affection.",
+    "keywords": [
+      "receive",
+      "sweet",
+      "romantic"
+    ],
+    "reactionCandidates": [
+      "throw heart"
+    ]
+  },
+  {
+    "name": "capitulate",
+    "type": "expressive",
+    "description": "Raise hands and surrender with a defeated expression.",
+    "keywords": [
+      "surrender",
+      "give up",
+      "submit"
+    ],
+    "reactionCandidates": [
+      "pat on back",
+      "hug",
+      "cheer up"
+    ]
+  },
+  {
+    "name": "pace back and forth",
+    "type": "emotional",
+    "description": "Walk anxiously back and forth, showing nervousness or stress.",
+    "keywords": [
+      "anxious",
+      "nervous",
+      "worry"
+    ],
+    "reactionCandidates": [
+      "hug",
+      "reassure",
+      "sit beside"
+    ]
+  },
+  {
+    "name": "nod",
+    "type": "interactive",
+    "description": "Nod the head to express agreement or confirmation.",
+    "keywords": [
+      "agree",
+      "yes",
+      "confirmation"
+    ],
+    "reactionCandidates": [
+      "nod back",
+      "smile",
+      "cheer"
+    ]
+  },
+  {
+    "name": "shake head",
+    "type": "interactive",
+    "description": "Shake the head to express disagreement or refusal.",
+    "keywords": [
+      "no",
+      "disagree",
+      "reject"
+    ],
+    "reactionCandidates": [
+      "shrug",
+      "look surprised"
+    ]
+  },
+  {
+    "name": "run away",
+    "type": "active",
+    "description": "Suddenly run away, usually in panic or playfulness.",
+    "keywords": [
+      "escape",
+      "flee",
+      "panic"
+    ],
+    "reactionCandidates": [
+      "chase",
+      "call back"
+    ]
+  },
+  {
+    "name": "roll over",
+    "type": "neutral",
+    "description": "Roll over on the ground, often in silliness or submission.",
+    "keywords": [
+      "silly",
+      "playful",
+      "submissive"
+    ],
+    "reactionCandidates": [
+      "laugh",
+      "pat belly"
+    ]
+  },
+  {
+    "name": "clap",
+    "type": "expressive",
+    "description": "Clap hands together to show excitement or approval.",
+    "keywords": [
+      "celebrate",
+      "cheer",
+      "excited"
+    ],
+    "reactionCandidates": [
+      "smile",
+      "join clap"
+    ]
+  },
+  {
+    "name": "yawning",
+    "type": "passive",
+    "description": "Open mouth widely in a yawn, showing tiredness or boredom.",
+    "keywords": [
+      "tired",
+      "bored",
+      "sleepy"
+    ],
+    "reactionCandidates": [
+      "sleepy",
+      "pat head"
+    ]
+  },
+  {
+    "name": "agony",
+    "type": "expressive",
+    "description": "Visibly suffer in pain or distress.",
+    "keywords": [
+      "pain",
+      "distress",
+      "suffering"
+    ],
+    "reactionCandidates": [
+      "comfort",
+      "hug",
+      "wipe tears"
+    ]
+  },
+  {
+    "name": "dying",
+    "type": "dramatic",
+    "description": "Fall dramatically as if dying.",
+    "keywords": [
+      "dramatic",
+      "collapse",
+      "faint"
+    ],
+    "reactionCandidates": [
+      "revive",
+      "pull up",
+      "panic"
+    ]
+  },
+  {
+    "name": "vomiting",
+    "type": "reactive",
+    "description": "React by pretending to vomit, usually in disgust.",
+    "keywords": [
+      "disgust",
+      "gross",
+      "uncomfortable"
+    ],
+    "reactionCandidates": [
+      "look shocked",
+      "step back"
+    ]
+  },
+  {
+    "name": "fan self",
+    "type": "expressive",
+    "description": "Fan oneself due to heat or embarrassment.",
+    "keywords": [
+      "hot",
+      "flustered",
+      "warm"
+    ],
+    "reactionCandidates": [
+      "offer drink",
+      "shade",
+      "blow air"
+    ]
+  },
+  {
+    "name": "staggering",
+    "type": "passive",
+    "description": "Walk unsteadily as if about to fall.",
+    "keywords": [
+      "weak",
+      "dizzy",
+      "sick"
+    ],
+    "reactionCandidates": [
+      "support",
+      "pull up"
+    ]
+  },
+  {
+    "name": "fall down",
+    "type": "reactive",
+    "description": "Collapse suddenly to the ground.",
+    "keywords": [
+      "trip",
+      "hurt",
+      "slip"
+    ],
+    "reactionCandidates": [
+      "pull up",
+      "check condition"
+    ]
+  },
+  {
+    "name": "breathe heavily",
+    "type": "passive",
+    "description": "Breathe rapidly to express fatigue or panic.",
+    "keywords": [
+      "tired",
+      "panic",
+      "breathless"
+    ],
+    "reactionCandidates": [
+      "calm down",
+      "hand on back"
+    ]
+  },
+  {
+    "name": "knees hug",
+    "type": "emotional",
+    "description": "Sit and hug one's knees to show sadness or vulnerability.",
+    "keywords": [
+      "sad",
+      "alone",
+      "vulnerable"
+    ],
+    "reactionCandidates": [
+      "comfort",
+      "sit beside",
+      "hug"
+    ]
+  },
+  {
+    "name": "cry",
+    "type": "emotional",
+    "description": "Cry with visible tears.",
+    "keywords": [
+      "sad",
+      "emotional",
+      "hurt"
+    ],
+    "reactionCandidates": [
+      "wipe other's face",
+      "hug",
+      "comfort"
+    ]
+  },
+  {
+    "name": "wipe other's face",
+    "type": "interactive",
+    "description": "Wipe tears or dirt from another's face gently.",
+    "keywords": [
+      "care",
+      "help",
+      "comfort"
+    ],
+    "reactionCandidates": [
+      "cry",
+      "thank you"
+    ]
+  },
+  {
+    "name": "blow a kiss",
+    "type": "active",
+    "description": "Send a kiss through the air as a sign of affection.",
+    "keywords": [
+      "kiss",
+      "flirt",
+      "affection"
+    ],
+    "reactionCandidates": [
+      "catch kiss",
+      "blush"
+    ]
+  },
+  {
+    "name": "cheers and drink",
+    "type": "celebratory",
+    "description": "Raise a drink and toast together.",
+    "keywords": [
+      "celebrate",
+      "drink",
+      "toast"
+    ],
+    "reactionCandidates": [
+      "cheers and drink",
+      "clink glasses"
+    ]
+  },
+  {
+    "name": "kick someone",
+    "type": "active",
+    "description": "Kick another puppet playfully or in anger.",
+    "keywords": [
+      "attack",
+      "playful",
+      "frustrated"
+    ],
+    "reactionCandidates": [
+      "be kicked",
+      "dodge",
+      "fall down"
+    ]
+  },
+  {
+    "name": "be kicked",
+    "type": "reactive",
+    "description": "React to being kicked, usually stumbling or falling.",
+    "keywords": [
+      "hit",
+      "hurt",
+      "reaction"
+    ],
+    "reactionCandidates": [
+      "kick someone",
+      "staggering"
+    ]
+  },
+  {
+    "name": "hug",
+    "type": "interactive",
+    "description": "Wrap arms around someone to comfort or show love.",
+    "keywords": [
+      "love",
+      "comfort",
+      "warmth"
+    ],
+    "reactionCandidates": [
+      "hug back",
+      "lean against"
+    ]
+  },
+  {
+    "name": "hug back",
+    "type": "reactive",
+    "description": "Return a hug warmly.",
+    "keywords": [
+      "respond",
+      "affection",
+      "close"
+    ],
+    "reactionCandidates": [
+      "hug"
+    ]
+  },
+  {
+    "name": "hush",
+    "type": "soothing",
+    "description": "Gently ask for silence or calm.",
+    "keywords": [
+      "quiet",
+      "calm",
+      "soothe"
+    ],
+    "reactionCandidates": [
+      "stop crying",
+      "nod"
+    ]
+  },
+  {
+    "name": "pat on back",
+    "type": "supportive",
+    "description": "Gently pat another's back for encouragement.",
+    "keywords": [
+      "support",
+      "comfort",
+      "praise"
+    ],
+    "reactionCandidates": [
+      "capitulate",
+      "smile"
+    ]
+  },
+  {
+    "name": "pull up someone",
+    "type": "active",
+    "description": "Reach out and help someone get up.",
+    "keywords": [
+      "help",
+      "lift",
+      "assist"
+    ],
+    "reactionCandidates": [
+      "be pulled up"
+    ]
+  },
+  {
+    "name": "be pulled up",
+    "type": "passive",
+    "description": "Get helped up by another puppet.",
+    "keywords": [
+      "rise",
+      "recover",
+      "receive help"
+    ],
+    "reactionCandidates": [
+      "pull up someone"
+    ]
+  },
+  {
+    "name": "hit with object",
+    "type": "aggressive",
+    "description": "Throw or hit another puppet with an object.",
+    "keywords": [
+      "attack",
+      "angry",
+      "funny"
+    ],
+    "reactionCandidates": [
+      "be hit",
+      "dodge",
+      "get angry"
+    ]
+  },
+  {
+    "name": "shoot heart with gun",
+    "type": "dramatic",
+    "description": "Shoot a heart-shaped bullet dramatically.",
+    "keywords": [
+      "romantic",
+      "extreme",
+      "surprise"
+    ],
+    "reactionCandidates": [
+      "get heart shot",
+      "pretend faint"
+    ]
+  },
+  {
+    "name": "play dead",
+    "type": "dramatic",
+    "description": "Fall flat and pretend to be dead.",
+    "keywords": [
+      "funny",
+      "dramatic",
+      "avoid"
+    ],
+    "reactionCandidates": [
+      "revive",
+      "poke",
+      "laugh"
+    ]
+  },
+  {
+    "name": "splill water",
+    "type": "playful",
+    "description": "Accidentally or playfully spill water.",
+    "keywords": [
+      "prank",
+      "accident",
+      "reaction"
+    ],
+    "reactionCandidates": [
+      "angry puff",
+      "dry off"
+    ]
+  },
+  {
+    "name": "V sign",
+    "type": "pose",
+    "description": "Make a V sign with fingers, like for a photo.",
+    "keywords": [
+      "peace",
+      "photo",
+      "cute"
+    ],
+    "reactionCandidates": [
+      "take photo"
+    ]
+  },
+  {
+    "name": "take photo",
+    "type": "active",
+    "description": "Pretend to take a photo of someone.",
+    "keywords": [
+      "snapshot",
+      "memory",
+      "camera"
+    ],
+    "reactionCandidates": [
+      "V sign",
+      "pose"
+    ]
+  },
+  {
+    "name": "angry puff",
+    "type": "emotional",
+    "description": "Puff cheeks and look angry.",
+    "keywords": [
+      "angry",
+      "frustrated",
+      "cute"
+    ],
+    "reactionCandidates": [
+      "spill water",
+      "hug",
+      "kiss"
+    ]
+  },
+  {
+    "name": "bow",
+    "type": "gesture",
+    "description": "Bow politely to show respect.",
+    "keywords": [
+      "respect",
+      "thanks",
+      "polite"
+    ],
+    "reactionCandidates": [
+      "bow back",
+      "nod"
+    ]
+  },
+  {
+    "name": "kowtow",
+    "type": "gesture",
+    "description": "Kneel and bow deeply to show submission or apology.",
+    "keywords": [
+      "apologize",
+      "respect",
+      "submit"
+    ],
+    "reactionCandidates": [
+      "forgive",
+      "lift up"
+    ]
+  },
+  {
+    "name": "fly",
+    "type": "fantasy",
+    "description": "Fly through the air with joy or freedom.",
+    "keywords": [
+      "freedom",
+      "happy",
+      "fantasy"
+    ],
+    "reactionCandidates": [
+      "wave",
+      "chase"
+    ]
+  },
+  {
+    "name": "silly dance",
+    "type": "playful",
+    "description": "Perform a goofy, funny dance.",
+    "keywords": [
+      "funny",
+      "silly",
+      "entertain"
+    ],
+    "reactionCandidates": [
+      "laugh",
+      "join dance"
+    ]
+  },
+  {
+    "name": "shiver",
+    "type": "reactive",
+    "description": "Shiver from fear or cold.",
+    "keywords": [
+      "cold",
+      "fear",
+      "uncomfortable"
+    ],
+    "reactionCandidates": [
+      "warm up",
+      "hug"
+    ]
+  }
+]

@@ -6,6 +6,7 @@ import { TiMessages } from "react-icons/ti";
 import { useAuthContext } from "../../context/AuthContext";
 import PuppySprite from "./PuppySprite";
 import { getSocket } from "../../socket/socket";
+import axios from "axios";
 
 const MessageContainer = () => {
 	const { selectedConversation,
@@ -55,6 +56,34 @@ const MessageContainer = () => {
 		}
 	}, [authUser, selectedConversation]);
 
+	const [showSettings, setShowSettings] = useState(false);
+	const [personality, setPersonality] = useState("extrovert");
+	const [relationship, setRelationship] = useState("friend");
+
+	const toggleSettings = () => {
+		setShowSettings(!showSettings)
+		console.log("🐶 showSettings", showSettings);
+	};
+	const token = localStorage.getItem("token");
+	const handleSave = async () => {
+		try {
+			await axios.put(
+				"/api/users/updateProfile",
+				{ personality },
+				{ headers: { Authorization: `Bearer ${token}` } }
+			);
+			await axios.put(
+				`/api/messages/updateRelationship/${selectedConversation._id}`,
+				{ relationshipType: relationship },
+				{ headers: { Authorization: `Bearer ${token}` } }
+			);
+			setShowSettings(false);
+			alert("Settings updated!");
+		} catch (err) {
+			console.error("Update failed", err);
+			alert("Failed to update settings.");
+		}
+	};
 
 	return (
 		<div className='md:min-w-[450px] flex flex-col'>
@@ -63,10 +92,57 @@ const MessageContainer = () => {
 			) : (
 				<>
 					{/* Header */}
-					<div className='bg-slate-500 px-4 py-2 mb-2'>
+					<div className='flex flex-row justify-between bg-slate-500 px-4 py-2 mb-2'>
 						<span className='label-text'>To:</span>{" "}
 						<span className='text-gray-900 font-bold'>{selectedConversation.fullName}</span>
+						<div>
+							<button onClick={toggleSettings} className="text-white text-xl ml-2">
+								⚙️
+							</button>
+						</div>
 					</div>
+					{showSettings && (
+						<div className="absolute top-1/3 right-1/3 mt-2 w-64 bg-white border rounded-lg shadow-lg p-4 z-50">
+							<div className="mb-3">
+								<label className="block text-sm font-medium text-gray-700 mb-1">
+									👤 My Personality
+								</label>
+								<select
+									value={personality}
+									onChange={(e) => setPersonality(e.target.value)}
+									className="w-full border rounded px-2 py-1"
+								>
+									<option value="extrovert">Extrovert</option>
+									<option value="introvert">Introvert</option>
+								</select>
+							</div>
+
+							<div className="mb-3">
+								<label className="block text-sm font-medium text-gray-700 mb-1">
+									💬 Relationship
+								</label>
+								<select
+									value={relationship}
+									onChange={(e) => setRelationship(e.target.value)}
+									className="w-full border rounded px-2 py-1"
+								>
+									<option value="friend">Friend</option>
+									<option value="romantic partner">Romantic Partner</option>
+									<option value="colleague">Colleague</option>
+									<option value="elder">Elder</option>
+									<option value="boss">Boss</option>
+									<option value="family">Family</option>
+									<option value="acquaintance">Acquaintance</option>
+								</select>
+							</div>
+
+							<button
+								onClick={handleSave}
+								className="w-full bg-blue-500 text-white py-1 rounded hover:bg-blue-600"
+							>
+								Save
+							</button>
+						</div>)}
 					<Messages />
 					{/* <PuppySprite 
 						action={puppyAction} 

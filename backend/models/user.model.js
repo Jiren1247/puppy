@@ -31,6 +31,11 @@ const userSchema = new mongoose.Schema(
 			enum: ["purple", "robot", "fox"],
 			default: "purple",
 		},
+		personality: {
+			type: String,
+			enum: ["introvert", "extrovert"],
+			default: "extrovert",
+		}
 	},
 	{ timestamps: true }
 );

@@ -15,6 +15,10 @@ export const sendMessage = async (req, res) => {
 		if (!conversation) {
 			conversation = await Conversation.create({
 				participants: [senderId, receiverId],
+				relationshipTypes: {
+					[senderId]: "friend",  // 默认初始值
+					[receiverId]: "friend"
+				},
 			});
 		}
 
@@ -65,5 +69,50 @@ export const getMessages = async (req, res) => {
 	} catch (error) {
 		console.log("Error in getMessages controller: ", error.message);
 		res.status(500).json({ error: "Internal server error" });
+	}
+};
+
+export const updateRelationshipType = async (req, res) => {
+	try {
+		const userId = req.user._id.toString();
+		const convoId = req.params.id;
+		const { relationshipType } = req.body;
+		console.log("能运行", userId, convoId, relationshipType);
+		// let conversation = await Conversation.findOne({
+		// 	participants: { $all: [senderId, receiverId] },
+		// });
+		// if (!conversation) {
+		// 	conversation = await Conversation.create({
+		// 		participants: [senderId, receiverId],
+		// 		relationshipTypes: {
+		// 			[senderId]: "friend",  // 默认初始值
+		// 			[receiverId]: "friend"
+		// 		},
+		// 	});
+		// }
+
+		const valid = ["friend", "romantic partner", "colleague", "elder", "boss", "family", "acquaintance"];
+		if (!valid.includes(relationshipType)) {
+			return res.status(400).json({ error: "Invalid relationship type" });
+		}
+
+		const convo = await Conversation.findOne({
+			participants: { $all: [userId, convoId] },
+		});
+		console.log("convo", convo);
+		if (!convo) {
+			return res.status(404).json({ error: "Conversation not found" });
+		}
+
+		if (!convo.relationshipTypes) {
+			convo.relationshipTypes = new Map();
+		}
+		convo.relationshipTypes.set(userId.toString(), relationshipType);
+		await convo.save();
+
+		res.status(200).json({ message: "Relationship updated", relationshipType });
+	} catch (error) {
+		console.error("Error updating relationship:", error.message);
+		res.status(500).json({ error: "Server error" });
 	}
 };

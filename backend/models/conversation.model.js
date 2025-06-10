@@ -15,6 +15,13 @@ const conversationSchema = new mongoose.Schema(
 				default: [],
 			},
 		],
+		relationshipTypes: {
+			type: Map,
+			of: {
+				type: String,
+				enum: ["friend", "romantic partner", "colleague", "elder", "boss", "family", "acquaintance"]
+			}
+		},
 	},
 	{ timestamps: true }
 );

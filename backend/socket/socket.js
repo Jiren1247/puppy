@@ -34,14 +34,14 @@ io.on("connection", (socket) => {
 	socket.on("register-user", (userId) => {
 		if (userId) {
 			userSocketMap[userId] = socket.id;
-			console.log("✅ [Re-register] userId:", userId, "-> socket:", socket.id);
+			// console.log("✅ [Re-register] userId:", userId, "-> socket:", socket.id);
 		}
 	});
 
 	socket.on("puppet-action", ({ userId, action, receiverId }) => {
 		const receiverSocketId = getReceiverSocketId(receiverId);
-		console.log("📡 puppet-action: from", userId, "to", receiverId, "socketId:", receiverSocketId);
-		console.log("💾 userSocketMap:", userSocketMap);
+		// console.log("📡 puppet-action: from", userId, "to", receiverId, "socketId:", receiverSocketId);
+		// console.log("💾 userSocketMap:", userSocketMap);
 		if (receiverSocketId) {
 			io.to(receiverSocketId).emit("puppet-action-update", {
 				userId,        // 谁做的动作

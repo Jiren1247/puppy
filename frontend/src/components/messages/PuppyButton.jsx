@@ -6,7 +6,7 @@ import { useEffect } from "react";
 import { getSocket } from "../../socket/socket";
 
 const PuppyButton = ({message, onPuppyAction}) => {
-    const { receiverId, currentUserId, messages } = useConversation();
+    const { receiverId, currentUserId, messages, puppets } = useConversation();
     const setCurrentUserId = useConversation((state) => state.setCurrentUserId);
     const { authUser } = useAuthContext();
 	const socket = getSocket();
@@ -26,6 +26,9 @@ const PuppyButton = ({message, onPuppyAction}) => {
 		return "";
 	};
 
+	const partnerLastAction = puppets?.[receiverId]?.currentAction || "none";
+	const myLastAction = puppets?.[currentUserId]?.currentAction || "none";
+
 	const handleClick = async () => {
 		const currentUserMessage = message.trim() !== "" ? message : getLastUserMessage();
 		if (!currentUserMessage) {
@@ -35,7 +38,12 @@ const PuppyButton = ({message, onPuppyAction}) => {
         console.log("🐶 Current User Message:", currentUserMessage, "receiverId:", receiverId, "user_id", currentUserId);
 		try {
 			const res = await axios.get(`http://localhost:5000/api/puppy-recommendation`, {
-				params: { receiverId, currentUserMessage },
+				params: { 
+					receiverId, 
+					currentUserMessage, 
+					partnerLastAction,
+					myLastAction
+				 },
                 withCredentials: true
 			});
 			console.log("🐶 Puppy Recommendation:", res.data);

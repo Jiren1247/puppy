@@ -2,15 +2,64 @@ import Conversation from "../models/conversation.model.js";
 import Message from "../models/message.model.js";
 import User from "../models/user.model.js";
 import axios from "axios";
+import fs from 'fs';
+import path from 'path';
+
+const allActions = JSON.parse(
+	fs.readFileSync(path.join(process.cwd(), 'backend', 'db', 'puppetActions.json'), 'utf-8')
+);
+
+function getMatchingActions(input) {
+	const lower = input.toLowerCase();
+	return allActions.map(action => {
+		const inDescription = action.description.toLowerCase().includes(lower);
+		const keywordMatch = action.keywords.some(k => lower.includes(k));
+		let score = 0;
+		if (inDescription) score += 2;
+		if (keywordMatch) score += 1;
+		return { ...action, score };
+	}).filter(a => a.score > 0)
+		.sort((a, b) => b.score - a.score)
+		.slice(0, 10); // Always return top 3–4 even for fuzzy matches
+}
+
+function getReactionCandidates(lastActionName) {
+	const action = allActions.find(a => a.name === lastActionName);
+	if (!action) return [];
+	return allActions.filter(a => action.reactionCandidates.includes(a.name));
+}
+
+function getRecommendedActions(userInput, lastAction) {
+	const fromInput = getMatchingActions(userInput);
+	const fromReaction = getReactionCandidates(lastAction);
+
+	const seen = new Set();
+	const merged = [...fromInput, ...fromReaction].filter(a => {
+		if (seen.has(a.name)) return false;
+		seen.add(a.name);
+		return true;
+	});
+	if (merged.length < 4) {
+		const remaining = allActions.filter(a => !seen.has(a.name));
+		while (merged.length < 4 && remaining.length > 0) {
+			const index = Math.floor(Math.random() * remaining.length);
+			const next = remaining.splice(index, 1)[0];
+			merged.push(next);
+			seen.add(next.name);
+		}
+	}
+	//   console.log("✅ Matching actions:", fromInput.map(a => a.name));
+	//   console.log("✅ Reaction candidates:", fromReaction.map(a => a.name));
+	//   console.log("✅ Merged (before slicing):", merged.map(a => a.name));
+	return merged.slice(0, 4); // Return top 3–4
+}
 
 export const getPuppyRecommendation = async (req, res) => {
 	try {
-		const { receiverId, currentUserMessage } = req.query;
-		
-		const currentUserId  = req.user.userId;
-		console.log("🐶 Conversation ID:", receiverId, "Current User Message:", currentUserMessage, "currentUserId", currentUserId);
-		// const convo = await Conversation.findById(conversationId);
-		// const userIds = convo.participants;
+		const { receiverId, currentUserMessage, partnerLastAction, myLastAction } = req.query;
+
+		const currentUserId = req.user.userId;
+		// console.log("🐶 Conversation ID:", receiverId, "Current User Message:", currentUserMessage, "currentUserId", currentUserId);
 		const userIds = receiverId.split(",").map(id => id.trim());
 		// const users = await User.find({ _id: { $in: userIds } });
 		// const userMap = {};
@@ -27,6 +76,11 @@ export const getPuppyRecommendation = async (req, res) => {
 			return res.status(404).json({ error: "Conversation not found" });
 		}
 
+		const relationshipType = convo.relationshipTypes.get(currentUserId) || "friend";
+		const user = await User.findById(currentUserId);
+		const personalityType = user?.personality || "extrovert";
+		console.log("current user Id", currentUserId, "Relationship Type:", relationshipType, "Personality Type:", personalityType);
+
 		const messages = await Message.find({ _id: { $in: convo.messages } }).sort({ createdAt: 1 });
 		const formattedHistory = messages.map(msg => ({
 			role: msg.senderId.toString() === userIds[0].toString() ? "user" : "partner",
@@ -38,7 +92,7 @@ export const getPuppyRecommendation = async (req, res) => {
 		}
 
 
-	const systemPrompt = `
+		const systemPrompt = `
 	You are a Puppy Interaction Recommendation Assistant in a chat app. You do not talk or reply in natural language.
 
 	Your task is to act as a real-time emotional observer. Based on the user's personality type (MBTI), the type of relationship between the user and the partner, the full recent chat history, and the user's latest message input, you should analyze:
@@ -74,13 +128,13 @@ export const getPuppyRecommendation = async (req, res) => {
 	---
 
 	**Input Information:**
-	- Personality Type: Extrovert
-	- Relationship Type: Friend
+	- Personality Type: ${personalityType}
+	- Relationship Type: ${relationshipType}
 	- Full recent chat history (max 10 messages):  
 	${JSON.stringify(formattedHistory, null, 2)}
 	- Current user message: ${currentUserMessage}
-	- Partner Last Action: "excitement"
-
+	- Partner Last Action: "${partnerLastAction || 'none'}"
+	- User Last Action: "${myLastAction || 'none'}"
 	---
 
 	Please return ONLY the following JSON structure:
@@ -113,30 +167,34 @@ export const getPuppyRecommendation = async (req, res) => {
 		// });
 
 		const gptRes = await axios.post(
-		`${process.env.AZURE_OPENAI_ENDPOINT}/openai/deployments/${process.env.AZURE_DEPLOYMENT_NAME}/chat/completions?api-version=2024-12-01-preview`,
-		{
-			messages: [
-			{ role: "system", content: systemPrompt }
-			],
-			temperature: 0.6,
-			max_tokens: 500,
-			model: process.env.AZURE_MODEL_NAME
-		},
-		{
-			headers: {
-			"api-key": process.env.AZURE_OPENAI_KEY,
-			"Content-Type": "application/json"
+			`${process.env.AZURE_OPENAI_ENDPOINT}/openai/deployments/${process.env.AZURE_DEPLOYMENT_NAME}/chat/completions?api-version=2024-12-01-preview`,
+			{
+				messages: [
+					{ role: "system", content: systemPrompt }
+				],
+				temperature: 0.6,
+				max_tokens: 500,
+				model: process.env.AZURE_MODEL_NAME
+			},
+			{
+				headers: {
+					"api-key": process.env.AZURE_OPENAI_KEY,
+					"Content-Type": "application/json"
+				}
 			}
-		}
 		);
 
 		const content = gptRes.data.choices[0].message.content;
 		const parsed = JSON.parse(content);
-
+		const fuzzyRecommended = getRecommendedActions(currentUserMessage, myLastAction);
+		parsed.recommendedActions = fuzzyRecommended.map(a => ({
+			name: a.name,
+			description: a.description
+		}));
 		res.status(200).json(parsed);
 	} catch (err) {
 		console.error("🐶 Puppy AI error:", err?.response?.data || err.message);
-		
+
 
 		res.status(500).json({ error: "Failed to generate puppy action" });
 	}
